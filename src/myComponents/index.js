@@ -4,8 +4,21 @@ const getBaseURL = () => {
 };
 
 class MyLogo extends HTMLElement {
+  
     style = `
     @import url('https://fonts.googleapis.com/css2?family=Grey+Qo&display=swap');
+
+   
+
+    
+    
+    
+
+    @font-face {
+      font-family: "Lobster";
+      src: url("/fonts/Lobster.ttf") format("ttf"),
+             
+     }
 
     #logo {
         font-family: 'Grey Qo', cursive;
@@ -224,9 +237,16 @@ class MyLogo extends HTMLElement {
 
     `;
     html = `
+    <div class="content">
+    <h1>Générateur de Logo</h1>
+    <br>
+    <h2> Projet réalisé par Yohann Laurendeau</h2>
+    </div>
     <div id="logo" >mon logo 2
     
     </div>
+
+ 
         <br>
         Couleur : <input type="color" id="selecteurCouleur" val="blue">
         <br>
@@ -235,19 +255,19 @@ class MyLogo extends HTMLElement {
         <br>
         Texte du Logo: <input type="text" id="selecteurTexte">
         <br>
-        <div> Background color : <input type="color" id="selecteurBackCouleur"></div>
+        <div> Couleur du background : <input type="color" id="selecteurBackCouleur"></div>
 
-        <label for="select">Choose a background image:</label>
+        <label for="select">Choisissez une image de background:</label>
 
         <select id="select">
           <option value="default">Default</option>
-          <option value="angry">Angry</option>
-          <option value="calm">calm</option>
+          <option value="angry">Enervé</option>
+          <option value="calm">Calme</option>
 
    
 </select>
 <br>
-<label for="selecteffect">Choose an effect:</label>
+<label for="selecteffect">Choisissez un effet:</label>
 
 <select id="selecteffect">
 <option value="">Default</option>
@@ -257,40 +277,52 @@ class MyLogo extends HTMLElement {
 
 
 </select>
-Add Infinite effect<input type="button" id="infinite" value="Add Infinite effect">
-<input type="button" id="noinfinite" value="Stop Infinite effect">
+<br>
+<br>
+<input type="button" id="infinite" value="Activer effet infini">
+<input type="button" id="noinfinite" value="Desactiver effet infini">
 
 <div>
-Personnaliser les bords : 
-<br>
+
 Couleur du bord : <input type="color" id="bordCouleur">
 <br>
 Border Radius : 
 Border top left : 5 <input type="range" val=0 min=0 max=100 
 id="borderTopLeft"> 100
-Border top right :5 <input type="range" val=0 min=0 max=100 
+Border top right : 5 <input type="range" val=0 min=0 max=100 
 id="borderTopRight"> 100
-Border bottom left :5 <input type="range" val=0 min=0 max=100
+Border bottom left : 5 <input type="range" val=0 min=0 max=100
 id="borderBottomLeft"> 100
-Border bottom right :5 <input type="range" val=0 min=0 max=100 
+Border bottom right : 5 <input type="range" val=0 min=0 max=100 
 id="borderBottomRight"> 100
 </div>
-Border Size:5 <input type="range" val=0 min=0 max=100 
+Border Size : 5 <input type="range" val=0 min=0 max=100 
 id="borderSize"> 100
 <div>
 
-Get random name
-<input type="button" id="randomName" value="Random Name">
+Génèrer nom aléatoire
+<input type="button" id="randomName" value="nom aléatoire">
 </div>
 
 
 <div>
 
-Get random Logo
-<input type="button" id="randomLogo" value="Random Logo">
+Génèrer logo aléatoire
+<input type="button" id="randomLogo" value="logo aléatoire">
 </div>
 
 
+
+
+Changer la police
+
+
+<select id="changeFamily">
+<option value="Default">Default</option>
+<option value="Verdana">Verdana</option>
+<option value="Roboto">Roboto</option>
+
+</div>
        
 
     `;
@@ -299,7 +331,7 @@ Get random Logo
         super();
         // On crée le "shadow DOM"
         this.attachShadow({ mode: "open" });
-
+        
         // récupérer les propriétés/attributs HTML
         this.couleur = this.getAttribute("couleur");
         if(!this.couleur) this.couleur = "black";
@@ -779,7 +811,7 @@ Get random Logo
         // ici on instancie l'interface graphique etc.
         this.shadowRoot.innerHTML = `<style>${this.style}</style>`
             + this.html;
-
+           
         this.logo = this.shadowRoot.querySelector("#logo");
         this.logo.innerHTML = this.text;
         // affecter les valeurs des attributs à la création
@@ -789,6 +821,7 @@ Get random Logo
         this.logo.classList.add(this.animationClass);
         this.logo.style.fontSize = this.size;
         this.logo.style.borderColor = this.borderColor;
+        
         this.declareEcouteurs();
 
         // On modifie les URLs relatifs
@@ -873,6 +906,11 @@ Get random Logo
             this.shadowRoot.querySelector("#randomLogo")
             .addEventListener("click", (event) => {
                 this.genLogo(event);
+            });
+
+            this.shadowRoot.querySelector("#changeFamily")
+            .addEventListener("input", (event) => {
+                this.changeFamily(event);
             });
             
     }
@@ -983,9 +1021,26 @@ genName(event){
   
 }
 
+changeFamily(event){
+  switch(event.target.value){
+    case "Verdana":
+      this.logo.style.fontFamily = "Verdana";
+      break;
+    case "Roboto":
+      this.logo.style.fontFamily = "Roboto";
+      break;
+    
+    default :
+    this.logo.style.fontFamily = "Georgia";
+      break;
+  }
+  
+    
+}
+
 genLogo(event){
   //Rand de la couleur
-  let color = ["red","blue","purple","yellow","green","brown"]
+  let color = ["black","blue","purple","grey","green","brown"]
   let randcolor = Math.floor(Math.random() * color.length);
   this.logo.style.color = color[randcolor];
 
